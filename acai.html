@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Açaí Pro | Delivery App</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: '#6D28D9', /* Roxo vibrante e premium */
+                        brandLight: '#8B5CF6',
+                        brandDark: '#4C1D95',
+                        accent: '#10B981', /* Verde para botões de sucesso/avanço */
+                        surface: '#FFFFFF',
+                        surfaceAlt: '#F8FAFC',
+                        textPrimary: '#0F172A',
+                        textSecondary: '#64748B',
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { 
+            -webkit-tap-highlight-color: transparent; 
+            background-color: #0F172A; /* Fundo escuro atrás do app container */
+        }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .slide-up { animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+        .slide-left { animation: slideLeft 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes slideLeft { from { transform: translateX(100%); } to { transform: translateX(0); } }
+
+        /* Container que simula a tela do celular no desktop */
+        .app-container {
+            max-width: 480px; 
+            margin: 0 auto;
+            background-color: #F8FAFC;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(0,0,0,0.3);
+        }
+
+        /* Hero Image Overlay */
+        .hero-gradient {
+            background: linear-gradient(to top, rgba(15, 23, 42, 1) 10%, rgba(15, 23, 42, 0.4) 60%, rgba(15, 23, 42, 0.1) 100%);
+        }
+    </style>
+</head>
+<body class="text-textPrimary">
+
+    <div class="app-container">
+        
+        <div id="landing-page" class="absolute inset-0 z-50 flex flex-col bg-textPrimary fade-in">
+            <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1590301157890-4810ed352733?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80')] bg-cover bg-center"></div>
+            <div class="absolute inset-0 hero-gradient"></div>
+            
+            <div class="relative z-10 flex flex-col h-full justify-end p-6 pb-12">
+                <div class="mb-auto mt-12 flex justify-center">
+                    <div class="w-24 h-24 bg-brand rounded-full flex items-center justify-center border-4 border-white/20 shadow-2xl">
+                        <i class="fas fa-leaf text-4xl text-white"></i>
+                    </div>
+                </div>
+
+                <div class="text-center mb-8">
+                    <h1 class="text-5xl font-extrabold text-white mb-2 tracking-tight">Açaí <span class="text-brandLight">Pro</span></h1>
+                    <p class="text-gray-300 text-lg mb-4">O melhor açaí da cidade, montado do seu jeito e entregue rapidinho.</p>
+                    <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20">
+                        <span class="w-2.5 h-2.5 bg-green-400 rounded-full animate-pulse"></span>
+                        <span class="text-white text-sm font-medium">Aberto e aceitando pedidos</span>
+                    </div>
+                </div>
+
+                <button onclick="enterApp()" class="w-full bg-brand text-white font-bold text-lg py-4 rounded-xl shadow-[0_10px_25px_-5px_rgba(109,40,217,0.5)] hover:bg-brandLight transition-all active:scale-95 flex items-center justify-center gap-2">
+                    <span>Fazer meu Pedido</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="main-app" class="hidden h-full flex flex-col relative pb-24">
+            <header class="bg-surface px-4 py-5 shadow-sm relative z-20">
+                <div class="flex justify-between items-center mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-brand flex items-center justify-center text-white shadow-md">
+                            <i class="fas fa-leaf text-lg"></i>
+                        </div>
+                        <div>
+                            <h2 class="font-bold text-lg leading-none">Açaí Pro</h2>
+                            <p class="text-xs text-brand font-medium mt-0.5"><i class="fas fa-star text-yellow-400"></i> 4.9 (500+ avaliações)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative">
+                    <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" placeholder="Buscar açaí, combos, adicionais..." class="w-full bg-surfaceAlt border border-gray-200 rounded-xl py-3 pl-12 pr-4 text-sm focus:outline-none focus:border-brand transition-colors" disabled>
+                </div>
+            </header>
+
+            <nav class="sticky top-0 z-10 bg-surface/95 backdrop-blur-md border-b border-gray-100 overflow-x-auto scrollbar-hide">
+                <div class="flex px-4 gap-2 py-3 min-w-max" id="category-nav"></div>
+            </nav>
+
+            <main id="menu-container" class="flex-1 bg-surfaceAlt overflow-y-auto"></main>
+
+            <div id="cart-bottom-bar" class="fixed bottom-0 left-0 right-0 z-40 transform translate-y-full transition-transform duration-300 flex justify-center">
+                <div class="w-full max-w-[480px] bg-brand text-white p-4 cursor-pointer hover:bg-brandDark transition-colors flex justify-between items-center" onclick="openCart()">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-white text-brand w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shadow-inner" id="cart-count">0</div>
+                        <span class="font-medium text-sm">Ver minha sacola</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold text-lg" id="cart-total-float">R$ 0,00</span>
+                        <i class="fas fa-chevron-up text-xs opacity-70"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="options-modal" class="fixed inset-0 z-[60] hidden flex items-end justify-center">
+            <div class="absolute inset-0 bg-textPrimary/60 backdrop-blur-sm transition-opacity" onclick="closeOptionsModal()"></div>
+            <div class="relative w-full max-w-[480px] bg-surface rounded-t-3xl h-[85vh] flex flex-col slide-up">
+                
+                <button onclick="closeOptionsModal()" class="absolute top-4 right-4 bg-white/80 backdrop-blur text-gray-800 w-8 h-8 rounded-full flex items-center justify-center shadow-md z-10">
+                    <i class="fas fa-times"></i>
+                </button>
+
+                <div class="w-full h-48 bg-gray-200 flex-shrink-0 relative">
+                    <img id="modal-img" src="" class="w-full h-full object-cover rounded-t-3xl">
+                    <div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-surface to-transparent"></div>
+                </div>
+                
+                <div class="flex-1 overflow-y-auto -mt-6 relative z-10">
+                    <div class="px-5 pb-4">
+                        <h2 id="modal-title" class="text-2xl font-extrabold text-textPrimary leading-tight"></h2>
+                        <p id="modal-desc" class="text-textSecondary text-sm mt-2 leading-relaxed"></p>
+                        <div class="text-brand font-bold text-lg mt-3" id="modal-base-price"></div>
+                    </div>
+
+                    <div class="w-full h-2 bg-surfaceAlt"></div>
+
+                    <div class="p-5">
+                        <div class="flex justify-between items-end mb-4">
+                            <div>
+                                <h3 class="font-bold text-textPrimary text-base">Turbine seu pedido</h3>
+                                <p class="text-xs text-textSecondary mt-0.5">Escolha seus adicionais favoritos</p>
+                            </div>
+                            <span class="bg-gray-100 text-gray-500 text-[10px] font-bold px-2 py-1 rounded">OPCIONAL</span>
+                        </div>
+                        <div id="toppings-list" class="space-y-3"></div>
+                    </div>
+                </div>
+
+                <div class="p-4 border-t border-gray-100 bg-surface shadow-[0_-10px_20px_rgba(0,0,0,0.03)] flex items-center justify-between gap-4">
+                    <div class="flex-shrink-0">
+                        <span class="block text-xs text-textSecondary font-medium mb-0.5">Total a pagar</span>
+                        <span id="modal-total-price" class="text-xl font-extrabold text-brand">R$ 0,00</span>
+                    </div>
+                    <button onclick="confirmAddWithToppings()" class="flex-1 bg-brand text-white font-bold py-3.5 rounded-xl hover:bg-brandDark transition-transform active:scale-95 shadow-lg shadow-brand/30">
+                        Adicionar à Sacola
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="cart-modal" class="fixed inset-0 z-[70] hidden flex items-end justify-center">
+            <div class="absolute inset-0 bg-textPrimary/60 backdrop-blur-sm transition-opacity" onclick="closeCart()"></div>
+            <div class="relative w-full max-w-[480px] bg-surface rounded-t-3xl h-[90vh] flex flex-col slide-up overflow-hidden">
+                
+                <div class="p-4 border-b border-gray-100 flex justify-between items-center bg-surface relative z-10">
+                    <button id="btn-cart-back" onclick="goToCartStep1()" class="text-textPrimary hidden p-2 -ml-2"><i class="fas fa-arrow-left"></i></button>
+                    <h2 class="font-bold text-lg text-textPrimary text-center flex-1" id="cart-title">Revisar Pedido</h2>
+                    <button onclick="closeCart()" class="text-textSecondary hover:text-red-500 p-2 -mr-2"><i class="fas fa-times text-lg"></i></button>
+                </div>
+                
+                <div id="cart-step-1" class="flex-1 flex flex-col h-full bg-surfaceAlt overflow-hidden">
+                    <div class="flex-1 overflow-y-auto p-4 space-y-4" id="cart-items-container">
+                        <div id="cart-items" class="bg-surface rounded-2xl border border-gray-100 overflow-hidden shadow-sm divide-y divide-gray-50"></div>
+                        
+                        <div id="empty-cart-msg" class="text-center py-16 hidden">
+                            <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-shopping-basket text-3xl text-gray-300"></i>
+                            </div>
+                            <h3 class="font-bold text-textPrimary text-lg mb-1">Sua sacola está vazia</h3>
+                            <p class="text-textSecondary text-sm">Que tal adicionar um açaí delicioso?</p>
+                        </div>
+                    </div>
+                    
+                    <div class="p-4 bg-surface border-t border-gray-100 shadow-[0_-10px_20px_rgba(0,0,0,0.03)]" id="cart-footer-1">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-textSecondary text-sm font-medium">Subtotal</span>
+                            <span class="text-xl font-extrabold text-textPrimary" id="cart-subtotal">R$ 0,00</span>
+                        </div>
+                        <button onclick="goToCartStep2()" class="w-full bg-brand text-white font-bold py-4 rounded-xl shadow-lg shadow-brand/30 flex justify-between items-center px-6 hover:bg-brandDark active:scale-95 transition-all">
+                            <span>Continuar</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="cart-step-2" class="flex-1 flex flex-col h-full bg-surfaceAlt overflow-hidden hidden slide-left">
+                    <div class="flex-1 overflow-y-auto p-4 space-y-4 pb-10">
+                        
+                        <div class="bg-surface rounded-2xl border border-gray-100 p-4 shadow-sm">
+                            <h3 class="font-bold text-textPrimary mb-3 text-sm flex items-center gap-2"><i class="fas fa-motorcycle text-brand"></i> Como deseja receber?</h3>
+                            <div class="grid grid-cols-2 gap-3 mb-4">
+                                <label class="border-2 border-gray-100 rounded-xl p-3 cursor-pointer has-[:checked]:border-brand has-[:checked]:bg-brand/5 transition-all text-center group">
+                                    <input type="radio" name="delivery-type" value="delivery" class="hidden" checked onchange="toggleDeliveryFields()">
+                                    <i class="fas fa-home text-gray-400 group-has-[:checked]:text-brand mb-1 text-lg"></i>
+                                    <div class="text-sm font-semibold text-textPrimary">Entrega</div>
+                                </label>
+                                <label class="border-2 border-gray-100 rounded-xl p-3 cursor-pointer has-[:checked]:border-brand has-[:checked]:bg-brand/5 transition-all text-center group">
+                                    <input type="radio" name="delivery-type" value="pickup" class="hidden" onchange="toggleDeliveryFields()">
+                                    <i class="fas fa-store text-gray-400 group-has-[:checked]:text-brand mb-1 text-lg"></i>
+                                    <div class="text-sm font-semibold text-textPrimary">Retirar</div>
+                                </label>
+                            </div>
+                            
+                            <div id="address-fields" class="space-y-3 mt-2">
+                                <input type="text" id="input-bairro" placeholder="Bairro" class="w-full p-3.5 rounded-xl border border-gray-200 bg-surfaceAlt text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-all">
+                                <div class="flex gap-3">
+                                    <input type="text" id="input-rua" placeholder="Rua / Endereço" class="flex-2 w-full p-3.5 rounded-xl border border-gray-200 bg-surfaceAlt text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-all">
+                                    <input type="text" id="input-num" placeholder="Nº" class="w-24 p-3.5 rounded-xl border border-gray-200 bg-surfaceAlt text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-all">
+                                </div>
+                                <input type="text" id="input-comp" placeholder="Complemento (Opcional)" class="w-full p-3.5 rounded-xl border border-gray-200 bg-surfaceAlt text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-all">
+                            </div>
+                        </div>
+
+                        <div class="bg-surface rounded-2xl border border-gray-100 p-4 shadow-sm">
+                            <h3 class="font-bold text-textPrimary mb-3 text-sm flex items-center gap-2"><i class="fas fa-wallet text-brand"></i> Forma de Pagamento</h3>
+                            <div class="space-y-2">
+                                <label class="flex items-center gap-3 p-3 border border-gray-100 rounded-xl cursor-pointer has-[:checked]:border-brand has-[:checked]:bg-brand/5">
+                                    <input type="radio" name="payment-method" value="pix" class="w-4 h-4 accent-brand" checked onchange="toggleChangeInput()">
+                                    <i class="fab fa-pix text-[#32BCAD]"></i>
+                                    <span class="font-medium text-sm flex-1">PIX (Chave Celular)</span>
+                                </label>
+                                <label class="flex items-center gap-3 p-3 border border-gray-100 rounded-xl cursor-pointer has-[:checked]:border-brand has-[:checked]:bg-brand/5">
+                                    <input type="radio" name="payment-method" value="card" class="w-4 h-4 accent-brand" onchange="toggleChangeInput()">
+                                    <i class="fas fa-credit-card text-gray-600"></i>
+                                    <span class="font-medium text-sm flex-1">Cartão (Leva Maquininha)</span>
+                                </label>
+                                <label class="flex items-center gap-3 p-3 border border-gray-100 rounded-xl cursor-pointer has-[:checked]:border-brand has-[:checked]:bg-brand/5">
+                                    <input type="radio" name="payment-method" value="money" class="w-4 h-4 accent-brand" onchange="toggleChangeInput()">
+                                    <i class="fas fa-money-bill-wave text-green-600"></i>
+                                    <span class="font-medium text-sm flex-1">Dinheiro</span>
+                                </label>
+                            </div>
+                            
+                            <div id="change-container" class="hidden mt-3 p-3 bg-green-50 rounded-xl border border-green-100">
+                                <label class="text-xs font-bold text-green-800 mb-1 block">Precisa de troco para quanto?</label>
+                                <div class="relative">
+                                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-bold text-sm">R$</span>
+                                    <input type="number" id="input-change" placeholder="Ex: 50" class="w-full p-2 pl-9 rounded-lg border border-gray-200 bg-white text-sm focus:outline-none focus:border-green-500">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-surface rounded-2xl border border-gray-100 p-4 shadow-sm">
+                            <h3 class="font-bold text-textPrimary mb-3 text-sm flex items-center gap-2"><i class="fas fa-user text-brand"></i> Seus Dados</h3>
+                            <input type="text" id="input-name" placeholder="Como devemos te chamar?" class="w-full p-3.5 rounded-xl border border-gray-200 bg-surfaceAlt text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-all">
+                        </div>
+
+                    </div>
+                    
+                    <div class="p-4 bg-surface border-t border-gray-100 shadow-[0_-10px_20px_rgba(0,0,0,0.03)]">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-textSecondary text-sm font-medium">Total do Pedido</span>
+                            <span class="text-2xl font-extrabold text-textPrimary" id="final-total">R$ 0,00</span>
+                        </div>
+                        <button onclick="finishOrder()" class="w-full bg-[#25D366] text-white font-bold py-4 rounded-xl shadow-lg shadow-green-500/30 flex items-center justify-center gap-2 hover:bg-[#1DA851] active:scale-95 transition-all">
+                            <i class="fab fa-whatsapp text-xl"></i>
+                            <span>Enviar Pedido por WhatsApp</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="toast" class="fixed top-5 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-5 py-3 rounded-xl shadow-2xl z-[80] text-sm font-medium opacity-0 translate-y-[-20px] pointer-events-none transition-all duration-300 flex items-center gap-3">
+            <div class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center"><i class="fas fa-check text-xs"></i></div>
+            <span id="toast-msg">Adicionado com sucesso!</span>
+        </div>
+    </div>
+
+    <script>
+        // --- NAVEGAÇÃO / TRANSIÇÃO DE TELA ---
+        function enterApp() {
+            document.getElementById('landing-page').classList.add('hidden');
+            const mainApp = document.getElementById('main-app');
+            mainApp.classList.remove('hidden');
+            mainApp.classList.add('fade-in');
+        }
+
+        // --- DADOS ESTRUTURADOS COM COMBOS E PROMOÇÕES ---
+        const menuData = [
+            {
+                category: "Promoções",
+                icon: "fire text-orange-500",
+                badge: "🔥",
+                items: [
+                    { id: 99, name: "Barca Pela Metade do Preço", desc: "Barca 500ml completa. Promoção válida apenas hoje até às 20h.", price: 19.90, img: "https://images.unsplash.com/photo-1618837332402-4c2813133857?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60", oldPrice: 28.00 }
+                ]
+            },
+            {
+                category: "Combos",
+                icon: "box text-brand",
+                items: [
+                    { id: 88, name: "Combo Casal (2x 500ml)", desc: "2 Copos de 500ml turbinados + 4 acompanhamentos gratuitos em cada.", price: 32.00, img: "https://images.unsplash.com/photo-1590301157890-4810ed352733?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" }
+                ]
+            },
+            {
+                category: "Açaí no Copo",
+                icon: "glass-water text-blue-500",
+                items: [
+                    { id: 1, name: "Copo 300ml Tradicional", desc: "Perfeito para a sobremesa. Açaí batido com xarope natural.", price: 12.00, img: "https://images.unsplash.com/photo-1590301157260-29240740b008?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
+                    { id: 2, name: "Copo 500ml Turbinado", desc: "O mais pedido da casa! Escolha seus adicionais na próxima tela.", price: 18.00, img: "https://images.unsplash.com/photo-1590301157260-29240740b008?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60", badge: "Mais Vendido" },
+                    { id: 3, name: "Copo 700ml Gigante", desc: "Para quem tem muita fome. Pura energia e sabor.", price: 24.00, img: "https://images.unsplash.com/photo-1590301157260-29240740b008?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" }
+                ]
+            },
+            {
+                category: "Barcas Premium",
+                icon: "ship text-purple-500",
+                items: [
+                    { id: 4, name: "Barca Pequena (500ml)", desc: "Açaí cremoso decorado com até 3 frutas frescas e 3 complementos.", price: 25.00, img: "https://images.unsplash.com/photo-1618837332402-4c2813133857?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
+                    { id: 5, name: "Barca Família (1 Litro)", desc: "Feita para a galera. 1 Litro de açaí, muitas frutas e caldas.", price: 45.00, img: "https://images.unsplash.com/photo-1590301157890-4810ed352733?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" }
+                ]
+            }
+        ];
+
+        const toppingsData = [
+            { id: 101, name: "Leite Ninho em pó", price: 3.00 },
+            { id: 102, name: "Granola Crocante Tradicional", price: 2.00 },
+            { id: 103, name: "Paçoca Rolha", price: 2.00 },
+            { id: 104, name: "Leite Condensado (Extra)", price: 2.50 },
+            { id: 105, name: "Morango Fresco Picado", price: 4.00 },
+            { id: 106, name: "Banana em Rodelas", price: 2.00 },
+            { id: 107, name: "Gotas de Chocolate", price: 3.50 }
+        ];
+
+        let cart = [];
+        let currentSelection = null;
+
+        document.addEventListener('DOMContentLoaded', () => { 
+            renderCategories();
+            renderMenu(); 
+        });
+
+        // --- RENDERIZAÇÃO DA INTERFACE ---
+        function renderCategories() {
+            const nav = document.getElementById('category-nav');
+            nav.innerHTML = menuData.map((cat, index) => `
+                <a href="#cat-${index}" class="whitespace-nowrap px-4 py-2 bg-white rounded-full border border-gray-200 text-sm font-medium text-textPrimary hover:border-brand hover:text-brand transition-colors flex items-center gap-2 shadow-sm">
+                    <i class="fas fa-${cat.icon}"></i> ${cat.category}
+                </a>
+            `).join('');
+        }
+
+        function renderMenu() {
+            const container = document.getElementById('menu-container');
+            container.innerHTML = menuData.map((cat, index) => `
+                <div id="cat-${index}" class="scroll-mt-20 pt-6 px-4">
+                    <h2 class="font-extrabold text-xl text-textPrimary mb-4 flex items-center gap-2">
+                        ${cat.badge ? `<span class="text-xl">${cat.badge}</span>` : ''} ${cat.category}
+                    </h2>
+                    <div class="grid grid-cols-1 gap-4">
+                        ${cat.items.map(item => `
+                            <div class="bg-surface rounded-2xl p-3 flex gap-4 cursor-pointer hover:shadow-md transition-shadow border border-gray-100 relative overflow-hidden" onclick="openProductModal(${item.id})">
+                                ${item.badge ? `<div class="absolute top-0 right-0 bg-brand text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg z-10">${item.badge}</div>` : ''}
+                                <div class="flex flex-col flex-1 justify-center pr-2 py-1">
+                                    <h3 class="font-bold text-textPrimary text-base leading-tight mb-1">${item.name}</h3>
+                                    <p class="text-xs text-textSecondary line-clamp-2 mb-3 leading-relaxed">${item.desc}</p>
+                                    <div class="flex items-center gap-2">
+                                        <span class="font-bold text-textPrimary">R$ ${item.price.toFixed(2).replace('.', ',')}</span>
+                                        ${item.oldPrice ? `<span class="text-xs text-textSecondary line-through">R$ ${item.oldPrice.toFixed(2).replace('.', ',')}</span>` : ''}
+                                    </div>
+                                </div>
+                                <div class="w-28 h-28 rounded-xl overflow-hidden flex-shrink-0 bg-surfaceAlt relative">
+                                    <img src="${item.img}" class="w-full h-full object-cover">
+                                    <div class="absolute bottom-2 right-2 bg-surface w-8 h-8 rounded-full flex items-center justify-center shadow-md text-brand">
+                                        <i class="fas fa-plus text-sm"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function findItem(id) { 
+            for (let cat of menuData) for (let item of cat.items) if (item.id === id) return item; 
+        }
+
+        // --- LÓGICA DO MODAL DE PRODUTO ---
+        function openProductModal(id) {
+            currentSelection = findItem(id);
+            document.getElementById('modal-img').src = currentSelection.img;
+            document.getElementById('modal-title').innerText = currentSelection.name;
+            document.getElementById('modal-desc').innerText = currentSelection.desc;
+            document.getElementById('modal-base-price').innerText = formatCurrency(currentSelection.price);
+            
+            document.getElementById('toppings-list').innerHTML = toppingsData.map(top => `
+                <label class="flex items-center justify-between p-4 bg-surface rounded-xl border border-gray-100 cursor-pointer group hover:border-brand/30 has-[:checked]:border-brand has-[:checked]:bg-brand/5 transition-all">
+                    <div class="flex items-center gap-3">
+                        <div class="relative flex items-center justify-center w-5 h-5 border-2 border-gray-300 rounded focus-within:border-brand">
+                            <input type="checkbox" value="${top.id}" onchange="updateModalPrice()" class="peer opacity-0 absolute inset-0 cursor-pointer">
+                            <i class="fas fa-check text-brand text-xs opacity-0 peer-checked:opacity-100 transition-opacity"></i>
+                        </div>
+                        <span class="text-sm font-medium text-textPrimary">${top.name}</span>
+                    </div>
+                    <span class="text-sm font-semibold text-textSecondary group-has-[:checked]:text-brand">+ R$ ${top.price.toFixed(2).replace('.', ',')}</span>
+                </label>
+            `).join('');
+            
+            updateModalPrice();
+            const modal = document.getElementById('options-modal');
+            modal.classList.remove('hidden');
+        }
+
+        function closeOptionsModal() { 
+            document.getElementById('options-modal').classList.add('hidden'); 
+        }
+        
+        function updateModalPrice() {
+            let total = currentSelection.price;
+            document.querySelectorAll('#toppings-list input:checked').forEach(box => { 
+                const top = toppingsData.find(t => t.id == box.value); 
+                if(top) total += top.price; 
+            });
+            document.getElementById('modal-total-price').innerText = formatCurrency(total);
+        }
+
+        function confirmAddWithToppings() {
+            const myToppings = []; 
+            let toppingsTotal = 0;
+            
+            document.querySelectorAll('#toppings-list input:checked').forEach(box => { 
+                const top = toppingsData.find(t => t.id == box.value); 
+                if(top) { myToppings.push(top); toppingsTotal += top.price; } 
+            });
+            
+            cart.push({ 
+                uid: Date.now(), 
+                ...currentSelection, 
+                finalPrice: currentSelection.price + toppingsTotal, 
+                toppings: myToppings 
+            });
+            
+            closeOptionsModal(); 
+            updateCartUI(); 
+            showToast("Item adicionado à sacola");
+        }
+
+        // --- LÓGICA DO CARRINHO E CHECKOUT ---
+        function removeFromCart(uid) { 
+            const index = cart.findIndex(i => i.uid === uid); 
+            if (index > -1) cart.splice(index, 1); 
+            updateCartUI();
+            if(cart.length === 0) closeCart();
+        }
+
+        function updateCartUI() {
+            const totalQty = cart.length; 
+            const totalPrice = cart.reduce((acc, item) => acc + item.finalPrice, 0);
+            
+            document.getElementById('cart-count').innerText = totalQty; 
+            document.getElementById('cart-total-float').innerText = formatCurrency(totalPrice); 
+            document.getElementById('cart-subtotal').innerText = formatCurrency(totalPrice);
+            document.getElementById('final-total').innerText = formatCurrency(totalPrice);
+            
+            const bottomBar = document.getElementById('cart-bottom-bar'); 
+            totalQty > 0 ? bottomBar.classList.remove('translate-y-full') : bottomBar.classList.add('translate-y-full');
+            
+            const itemsContainer = document.getElementById('cart-items');
+            
+            if (cart.length === 0) { 
+                itemsContainer.innerHTML = ''; 
+                document.getElementById('empty-cart-msg').classList.remove('hidden'); 
+                document.getElementById('cart-footer-1').classList.add('hidden');
+            } else { 
+                document.getElementById('empty-cart-msg').classList.add('hidden'); 
+                document.getElementById('cart-footer-1').classList.remove('hidden');
+                
+                itemsContainer.innerHTML = cart.map(item => `
+                    <div class="flex justify-between items-start p-4 bg-white relative">
+                        <div class="flex-1 pr-6">
+                            <div class="font-bold text-textPrimary text-sm">${item.name}</div>
+                            ${item.toppings.length ? `
+                                <div class="text-[11px] text-textSecondary mt-1 space-y-1">
+                                    ${item.toppings.map(t => `<div class="flex items-center gap-1"><span class="w-1 h-1 bg-gray-300 rounded-full"></span> ${t.name}</div>`).join('')}
+                                </div>
+                            ` : ''}
+                            <div class="text-sm font-bold text-brand mt-2">${formatCurrency(item.finalPrice)}</div>
+                        </div>
+                        <button onclick="removeFromCart(${item.uid})" class="w-8 h-8 rounded-full bg-red-50 text-red-500 flex items-center justify-center hover:bg-red-100 transition-colors">
+                            <i class="far fa-trash-alt text-xs"></i>
+                        </button>
+                    </div>
+                `).join(''); 
+            }
+        }
+
+        function openCart() { 
+            if(cart.length === 0) return showToast("Sua sacola está vazia!");
+            document.getElementById('cart-modal').classList.remove('hidden');
+            goToCartStep1();
+        }
+
+        function closeCart() { 
+            document.getElementById('cart-modal').classList.add('hidden'); 
+        }
+
+        function goToCartStep1() {
+            document.getElementById('cart-step-2').classList.add('hidden');
+            document.getElementById('cart-step-1').classList.remove('hidden');
+            document.getElementById('cart-title').innerText = "Revisar Pedido";
+            document.getElementById('btn-cart-back').classList.add('hidden');
+        }
+
+        function goToCartStep2() {
+            if(cart.length === 0) return;
+            document.getElementById('cart-step-1').classList.add('hidden');
+            document.getElementById('cart-step-2').classList.remove('hidden');
+            document.getElementById('cart-title').innerText = "Entrega e Pagamento";
+            document.getElementById('btn-cart-back').classList.remove('hidden');
+        }
+        
+        function toggleDeliveryFields() { 
+            const isDelivery = document.querySelector('input[name="delivery-type"]:checked').value === 'delivery'; 
+            const addressFields = document.getElementById('address-fields'); 
+            isDelivery ? addressFields.classList.remove('hidden') : addressFields.classList.add('hidden'); 
+        }
+        
+        function toggleChangeInput() { 
+            const method = document.querySelector('input[name="payment-method"]:checked').value; 
+            const container = document.getElementById('change-container'); 
+            method === 'money' ? container.classList.remove('hidden') : container.classList.add('hidden'); 
+        }
+        
+        function showToast(msg) { 
+            const toast = document.getElementById('toast'); 
+            document.getElementById('toast-msg').innerText = msg; 
+            toast.classList.remove('opacity-0', 'translate-y-[-20px]'); 
+            setTimeout(() => toast.classList.add('opacity-0', 'translate-y-[-20px]'), 2500); 
+        }
+        
+        function formatCurrency(value) { 
+            return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); 
+        }
+
+        // --- FINALIZAÇÃO DO PEDIDO (WHATSAPP) ---
+        function finishOrder() {
+            const name = document.getElementById('input-name').value;
+            if (!name) {
+                document.getElementById('input-name').focus();
+                return showToast("Por favor, digite seu nome!");
+            }
+            
+            let text = `🟣 *NOVO PEDIDO | AÇAÍ PRO*\n👤 Cliente: *${name}*\n\n*🛒 RESUMO DO PEDIDO:*\n`;
+            
+            cart.forEach(item => { 
+                text += `🔸 1x *${item.name}*\n`; 
+                if(item.toppings.length > 0) { 
+                    item.toppings.forEach(t => text += `   ├ ${t.name}\n`); 
+                } 
+                text += `   └ Valor: ${formatCurrency(item.finalPrice)}\n\n`; 
+            });
+            
+            text += `*📦 ENTREGA / RETIRADA:*\n`;
+            const deliveryType = document.querySelector('input[name="delivery-type"]:checked').value;
+            if (deliveryType === 'delivery') {
+                const rua = document.getElementById('input-rua').value;
+                const num = document.getElementById('input-num').value;
+                const bairro = document.getElementById('input-bairro').value;
+                const comp = document.getElementById('input-comp').value;
+                
+                if(!rua || !num || !bairro) return showToast("Preencha o endereço completo!");
+                
+                text += `🛵 Entrega em Domicílio\n📍 ${rua}, ${num} - ${bairro}\n`;
+                if(comp) text += `📍 Comp: ${comp}\n`;
+            } else {
+                text += `🏪 Retirada na Loja\n`;
+            }
+            
+            text += `\n*💳 FORMA DE PAGAMENTO:*\n`;
+            const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value; 
+            
+            if(paymentMethod === 'pix') text += `Pix (Pagamento via Chave)\n`;
+            else if(paymentMethod === 'card') text += `Cartão (Levar maquininha)\n`;
+            else if(paymentMethod === 'money') {
+                text += `Dinheiro\n`;
+                const change = document.getElementById('input-change').value; 
+                if (change) text += `Troco para: R$ ${change}\n`; 
+                else text += `Sem necessidade de troco\n`;
+            }
+            
+            const total = cart.reduce((acc, item) => acc + item.finalPrice, 0);
+            text += `\n💰 *TOTAL A PAGAR: ${formatCurrency(total)}*`;
+            
+            // Simulação de Envio
+            alert("Redirecionando para o WhatsApp...\n\n" + text);
+            // Na vida real você usaria:
+            // const numeroZap = "5511999999999";
+            // window.open(`https://wa.me/${numeroZap}?text=${encodeURIComponent(text)}`);
+        }
+    </script>
+</body>
+</html>

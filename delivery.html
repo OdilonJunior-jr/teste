@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistemas de Delivery | GRIDX</title> 
+    <meta name="theme-color" content="#050505">
+
+    <link rel="shortcut icon" href="logo.jpg" type="image/jpeg">
+    <link rel="icon" href="logo.jpg" type="image/jpeg">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-body: #050505; 
+            --bg-card: rgba(10, 10, 12, 0.65); 
+            --text-main: #ffffff;
+            --text-muted: #a1a1aa;
+            --border: rgba(255, 255, 255, 0.05);
+            --whatsapp: #25D366; 
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { 
+            background-color: var(--bg-body); 
+            color: var(--text-main); 
+            font-family: 'Outfit', sans-serif; 
+            overflow-x: hidden; 
+            min-height: 100vh;
+            display: flex; flex-direction: column;
+        }
+
+        .site-background {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background-image: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.95)), url('fundo.jpg');
+            background-size: cover; background-position: center;
+        }
+
+        /* HEADER */
+        header { position: fixed; top: 0; left: 0; width: 100%; z-index: 100; padding: 15px 0; background: transparent; }
+        .header-inner{ max-width: 1200px; margin: 0 auto; padding: 0 20px; position: relative; display: flex; justify-content: space-between; align-items: center; }
+        .logo-floating{ display: flex; align-items: center; text-decoration: none; }
+        .logo-floating img{ height: 45px; width: auto; display: block; }
+
+        nav.nav-pill{ display: flex; align-items: center; padding: 6px 20px; background: rgba(15, 15, 15, 0.75); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 100px; backdrop-filter: blur(15px); }
+        .nav-links { display: flex; align-items: center; }
+        .nav-links a { color: var(--text-muted); text-decoration: none; margin: 0 15px; font-size: 0.85rem; font-weight: 500; transition: 0.2s; cursor: pointer; }
+        .nav-links a:hover, .nav-links a.active { color: #fff; font-weight: 700; }
+        .btn-nav { margin-left: 15px; color: #000 !important; background: var(--whatsapp); border-radius: 50px; padding: 6px 16px; text-decoration: none; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 6px; transition: transform 0.3s ease; }
+        .btn-nav:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4); }
+
+        /* HERO SECTION */
+        .container { max-width: 900px; margin: 100px auto 80px; padding: 0 20px; position: relative; z-index: 2; width: 100%; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        
+        .btn-back { color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px; transition: 0.3s; margin-bottom: 20px; }
+        .btn-back:hover { color: #fff; }
+
+        .hero-label { font-family: 'Outfit', sans-serif; color: var(--whatsapp); border: 1px solid rgba(37, 211, 102, 0.3); background: transparent; margin-bottom: 15px; display: inline-block; padding: 4px 16px; border-radius: 50px; font-size: 0.75rem; font-style: italic; }
+        h1 { font-size: 3.5rem; font-family: 'Playfair Display', serif; font-style: italic; font-weight: 700; margin-bottom: 12px; line-height: 1.1; }
+        .subtitle { color: var(--text-muted); max-width: 580px; margin: 0 auto 40px; line-height: 1.5; font-size: 0.9rem; }
+
+        /* GRID DE CARDS TRAVADO EM 2x2 SEMPRE */
+        .cards-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 100%; }
+        
+        .card { 
+            border: 1px solid var(--border); 
+            border-radius: 20px; 
+            padding: 40px 30px; 
+            transition: 0.3s; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            text-align: center; 
+            backdrop-filter: blur(12px); 
+            overflow: hidden;
+        }
+        .card:hover { 
+            border-color: rgba(37, 211, 102, 0.2); 
+            transform: translateY(-4px); 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4); 
+        }
+        
+        .icon-box { 
+            width: 55px; 
+            height: 55px; 
+            margin-bottom: 20px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            border-radius: 12px; 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            background: rgba(0, 0, 0, 0.4); 
+            position: relative;
+            z-index: 2;
+        }
+        .icon-box i { font-size: 1.5rem; color: var(--whatsapp); }
+
+        .card h3 { font-size: 1.8rem; margin-bottom: 6px; color: #fff; font-family: 'Playfair Display', serif; font-style: italic; font-weight: 700; position: relative; z-index: 2; }
+        .card .badge { color: var(--whatsapp); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; display: block; margin-bottom: 15px; font-weight: 800; position: relative; z-index: 2; }
+        .card p { color: var(--text-muted); line-height: 1.5; font-size: 0.85rem; margin-bottom: 30px; max-width: 280px; position: relative; z-index: 2; }
+        
+        .btn-testar { 
+            background: #fff; color: #000; padding: 10px 24px; border-radius: 50px; font-family: 'Outfit', sans-serif;
+            font-weight: 800; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; 
+            transition: 0.3s; border: none; margin-top: auto; position: relative; z-index: 2;
+        }
+        .btn-testar i { font-size: 1.1rem; transition: transform 0.3s; }
+        .card:hover .btn-testar { box-shadow: 0 0 15px rgba(255,255,255,0.15); }
+        .card:hover .btn-testar i { transform: translateX(2px) translateY(-2px); }
+
+        /* MODAL DO CELULAR FLUTUANTE */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); z-index: 1000; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-container { position: relative; transform: translateY(30px); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .modal-overlay.active .modal-container { transform: translateY(0); }
+        .close-modal { position: absolute; top: -10px; right: -60px; width: 40px; height: 40px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; transition: 0.3s; z-index: 10; }
+        .close-modal:hover { background: #ff4757; border-color: #ff4757; transform: rotate(90deg); }
+
+        /* iPhone Frame */
+        .iphone-frame { width: 340px; height: 680px; background: #000; border: 12px solid #1a1a1a; border-radius: 45px; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 0 2px #333; overflow: hidden; }
+        .notch { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 120px; height: 25px; background: #1a1a1a; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; z-index: 10; }
+        .notch::after { content: ''; position: absolute; top: 5px; right: 25px; width: 8px; height: 8px; border-radius: 50%; background: #0a0a0a; box-shadow: inset 0 0 2px rgba(255,255,255,0.2); }
+        .iframe-container { width: 100%; height: 100%; border: none; background: #111; border-radius: 32px; }
+        .loader { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border: 3px solid rgba(255,255,255,0.1); border-top-color: var(--whatsapp); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; z-index: 5; transition: opacity 0.3s; pointer-events: none; opacity: 0; }
+        
+        @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+        /* RESPONSIVO */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            .header-inner { justify-content: center; flex-direction: column; gap: 15px; }
+            .logo-floating { margin-bottom: 10px; }
+            .cards-grid { gap: 10px; }
+            .card { padding: 20px 15px; }
+            .card h3 { font-size: 1.1rem; }
+            .card .badge { font-size: 0.55rem; margin-bottom: 8px; }
+            .card p { font-size: 0.75rem; margin-bottom: 15px; }
+            .btn-testar { padding: 8px 15px; font-size: 0.75rem; }
+            .icon-box { width: 40px; height: 40px; margin-bottom: 10px; }
+            .icon-box i { font-size: 1.2rem; }
+            .close-modal { top: -50px; right: 50%; transform: translateX(50%); }
+            .close-modal:hover { transform: translateX(50%) scale(1.1); }
+            .iphone-frame { width: 90vw; height: 85vh; border-width: 8px; border-radius: 35px; }
+            .iframe-container { border-radius: 25px; }
+            .nav-pill { display: none; }
+        }
+        
+        /* Quebra para 1 coluna apenas em ecrãs extremamente pequenos */
+        @media (max-width: 450px) {
+            .cards-grid { grid-template-columns: 1fr; }
+        }
+
+        .reveal { opacity: 0; transform: translateY(20px); transition: 0.6s ease; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+    <div class="site-background"></div>
+
+    <header>
+        <div class="header-inner">
+            <a href="index.html" class="logo-floating">
+                <img src="logo.jpg" alt="GRIDX">
+            </a>
+            <nav class="nav-pill">
+                <div class="nav-links">
+                    <a href="index.html">Início</a>
+                    <a href="index.html">Portfólio</a>
+                    <a href="#" class="active" style="color: #fff;">Delivery Web</a>
+                </div>
+                <a href="https://wa.me/5534991823910" class="btn-nav">Contato <i class="ri-whatsapp-line"></i></a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="reveal active">
+            <a href="index.html" class="btn-back"><i class="ri-arrow-left-line"></i> Voltar ao site principal</a><br>
+            <span class="hero-label">Automatização para Restaurantes</span>
+            <h1>Sistemas de Delivery</h1>
+            <p class="subtitle">Infraestrutura digital rápida e sem taxas. O cliente monta o pedido e ele chega 100% organizado no seu WhatsApp. Escolha um protótipo abaixo e teste na prática.</p>
+        </div>
+
+        <div class="cards-grid">
+            
+            <div class="card reveal active" style="transition-delay: 0.1s; background-image: linear-gradient(rgba(10, 10, 12, 0.85), rgba(10, 10, 12, 0.95)), url('burguer.jpg'); background-size: cover; background-position: center;">
+                <div class="icon-box"><i class="ri-goblet-line"></i></div>
+                <h3>The Burger Boss</h3>
+                <span class="badge">Hamburgueria • Dark Mode</span>
+                <p>Design premium em formato de aplicativo. Focado em produtos de alto valor, com carrinho dinâmico.</p>
+                <button class="btn-testar" onclick="openPhone('burguer-dark.html')">Testar Sistema <i class="ri-arrow-right-up-line"></i></button>
+            </div>
+
+            <div class="card reveal active" style="transition-delay: 0.2s; background-image: linear-gradient(rgba(10, 10, 12, 0.85), rgba(10, 10, 12, 0.95)), url('acai.jpg'); background-size: cover; background-position: center;">
+                <div class="icon-box"><i class="ri-restaurant-2-line"></i></div>
+                <h3>Açaí Pro</h3>
+                <span class="badge">Açaiteria • Personalização</span>
+                <p>Interface focada em montagem. Ideal para produtos que exigem seleção de múltiplos adicionais.</p>
+                <button class="btn-testar" onclick="openPhone('acai.html')">Testar Sistema <i class="ri-arrow-right-up-line"></i></button>
+            </div>
+
+            <div class="card reveal active" style="transition-delay: 0.3s; background-image: linear-gradient(rgba(10, 10, 12, 0.85), rgba(10, 10, 12, 0.95)), url('restaurante.jpg'); background-size: cover; background-position: center;">
+                <div class="icon-box"><i class="ri-bento-line"></i></div>
+                <h3>Marmitaria Delícia</h3>
+                <span class="badge">Refeições • Cardápio Fixo</span>
+                <p>Sistema rigoroso com etapa obrigatória para escolha da guarnição e acompanhamentos do dia.</p>
+                <button class="btn-testar" onclick="openPhone('marmita.html')">Testar Sistema <i class="ri-arrow-right-up-line"></i></button>
+            </div>
+
+            <div class="card reveal active" style="transition-delay: 0.4s; background-image: linear-gradient(rgba(10, 10, 12, 0.85), rgba(10, 10, 12, 0.95)), url('burguer2.jpg'); background-size: cover; background-position: center;">
+                <div class="icon-box"><i class="ri-store-2-line"></i></div>
+                <h3>Classic Menu</h3>
+                <span class="badge">Lanchonete • Light Mode</span>
+                <p>Visual claro e tradicional. A melhor opção para cardápios extensos que precisam de leitura rápida.</p>
+                <button class="btn-testar" onclick="openPhone('burguer-light.html')">Testar Sistema <i class="ri-arrow-right-up-line"></i></button>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="phoneModal" onclick="closePhone(event)">
+        <div class="modal-container" onclick="event.stopPropagation()">
+            <button class="close-modal" onclick="closePhone()"><i class="ri-close-line"></i></button>
+            <div class="iphone-frame">
+                <div class="notch"></div>
+                <div class="loader" id="frameLoader"></div>
+                <iframe src="" id="previewFrame" class="iframe-container"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            setTimeout(() => {
+                document.querySelectorAll('.reveal').forEach((el) => {
+                    el.classList.add('active');
+                });
+            }, 100);
+        });
+
+        const modal = document.getElementById('phoneModal');
+        const iframe = document.getElementById('previewFrame');
+        const loader = document.getElementById('frameLoader');
+
+        // Escuta quando o iframe terminar de carregar o arquivo para esconder o loader
+        iframe.addEventListener('load', function() {
+            if(iframe.src && iframe.src !== window.location.href && iframe.src !== 'about:blank') {
+                loader.style.opacity = '0';
+            }
+        });
+
+        function openPhone(url) {
+            loader.style.opacity = '1';
+            iframe.src = url;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePhone(e) {
+            if (e && e.target !== modal && e.type !== 'click') return;
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            setTimeout(() => {
+                iframe.src = '';
+            }, 300);
+        }
+    </script>
+</body>
+</html>

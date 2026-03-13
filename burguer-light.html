@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Burger King Demo | Delivery</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: '#EA1D2C', /* Vermelho BK */
+                        dark: '#502314', /* Marrom Burguer */
+                        light: '#F3F4F6'
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { -webkit-tap-highlight-color: transparent; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        .modal-enter { animation: slideUp 0.3s ease-out forwards; }
+        @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 pb-24">
+
+    <header class="bg-dark text-white relative shadow-lg">
+        <div class="h-40 bg-cover bg-center absolute w-full opacity-40" style="background-image: url('https://images.unsplash.com/photo-1550547660-d9450f859349?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80');"></div>
+        <div class="relative z-10 p-5 pt-8 flex items-center gap-4">
+            <div class="w-20 h-20 rounded-full border-4 border-white bg-white overflow-hidden shadow-md flex-shrink-0">
+                <img src="https://cdn-icons-png.flaticon.com/512/3075/3075977.png" alt="Logo" class="w-full h-full object-cover p-1">
+            </div>
+            <div>
+                <h1 class="text-2xl font-bold leading-tight">Burger Demo</h1>
+                <div class="flex items-center gap-2 text-sm text-gray-300 mt-1">
+                    <span class="bg-green-500 w-2 h-2 rounded-full animate-pulse"></span>
+                    <span>Aberto agora</span> • <span>30-45 min</span>
+                </div>
+            </div>
+        </div>
+        <div class="relative z-10 bg-black/30 backdrop-blur-sm px-5 py-3 text-xs flex justify-between border-t border-white/10">
+            <div><i class="fas fa-fire text-brand mr-1"></i> Grelhado no Fogo</div>
+            <div><i class="fas fa-star text-yellow-400 mr-1"></i> 4.8 (1k+)</div>
+        </div>
+    </header>
+
+    <nav class="sticky top-0 z-30 bg-white shadow-sm border-b border-gray-100 overflow-x-auto scrollbar-hide">
+        <div class="flex px-4 gap-6 min-w-max" id="category-nav"></div>
+    </nav>
+
+    <main id="menu-container" class="p-4 space-y-8"></main>
+
+    <div id="cart-float-btn" onclick="toggleModal(true)" class="fixed bottom-6 left-4 right-4 bg-brand text-white p-4 rounded-xl shadow-2xl flex justify-between items-center transform translate-y-24 transition-transform duration-300 z-40 cursor-pointer hover:bg-red-700">
+        <div class="flex items-center gap-3"><div class="bg-white/20 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold" id="cart-count">0</div><span class="font-medium text-sm">Ver sacola</span></div><div class="font-bold" id="cart-total-float">R$ 0,00</div>
+    </div>
+
+    <div id="cart-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onclick="toggleModal(false)"></div>
+        <div class="absolute bottom-0 w-full bg-white rounded-t-3xl shadow-2xl h-[90vh] flex flex-col modal-enter">
+            <div class="p-5 border-b flex justify-between items-center bg-gray-50 rounded-t-3xl"><h2 class="font-bold text-lg text-gray-800">Finalizar Pedido</h2><button onclick="toggleModal(false)" class="text-gray-400 hover:text-red-500 text-xl"><i class="fas fa-times"></i></button></div>
+            <div class="flex-1 overflow-y-auto p-5 space-y-6">
+                <div id="cart-items" class="space-y-4"></div>
+                <div id="empty-cart-msg" class="text-center py-10 hidden"><i class="fas fa-hamburger text-4xl text-gray-200 mb-3"></i><p class="text-gray-400">Sua sacola está vazia.</p></div>
+                <hr class="border-gray-100">
+                <div>
+                    <h3 class="font-bold text-gray-800 mb-3 text-sm uppercase tracking-wide">Entrega</h3>
+                    <div class="flex gap-3">
+                        <label class="flex-1 border rounded-lg p-3 cursor-pointer hover:border-brand transition-colors has-[:checked]:border-brand has-[:checked]:bg-red-50"><input type="radio" name="delivery-type" value="delivery" class="hidden" checked onchange="toggleDeliveryFields()"><div class="flex flex-col items-center gap-1 text-sm"><i class="fas fa-motorcycle text-brand text-lg"></i><span class="font-semibold">Entrega</span></div></label>
+                        <label class="flex-1 border rounded-lg p-3 cursor-pointer hover:border-brand transition-colors has-[:checked]:border-brand has-[:checked]:bg-red-50"><input type="radio" name="delivery-type" value="pickup" class="hidden" onchange="toggleDeliveryFields()"><div class="flex flex-col items-center gap-1 text-sm"><i class="fas fa-store text-brand text-lg"></i><span class="font-semibold">Retirar</span></div></label>
+                    </div>
+                </div>
+                <div id="address-fields" class="space-y-3 bg-gray-50 p-4 rounded-lg border border-gray-200"><input type="text" id="input-bairro" placeholder="Bairro" class="w-full p-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:border-brand"><div class="flex gap-3"><input type="text" id="input-rua" placeholder="Rua / Avenida" class="flex-2 w-full p-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:border-brand"><input type="text" id="input-num" placeholder="Nº" class="w-24 p-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:border-brand"></div></div>
+                <div>
+                    <h3 class="font-bold text-gray-800 mb-3 text-sm uppercase tracking-wide">Pagamento</h3>
+                    <select id="payment-method" class="w-full p-3 rounded-lg border border-gray-300 text-sm bg-white focus:outline-none focus:border-brand" onchange="toggleChangeField()"><option value="pix">Pagamento via PIX</option><option value="card">Cartão (Levar maquininha)</option><option value="money">Dinheiro</option></select>
+                    <div id="change-field" class="hidden mt-3"><label class="text-xs text-gray-500 mb-1 block">Troco para quanto?</label><input type="text" id="input-troco" placeholder="Ex: R$ 50,00" class="w-full p-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:border-brand"></div>
+                </div>
+                <div><h3 class="font-bold text-gray-800 mb-3 text-sm uppercase tracking-wide">Seus Dados</h3><input type="text" id="input-name" placeholder="Seu Nome" class="w-full p-3 rounded-lg border border-gray-300 text-sm mb-3 focus:outline-none focus:border-brand"></div>
+            </div>
+            <div class="p-5 bg-white border-t shadow-[0_-5px_15px_rgba(0,0,0,0.05)]"><div class="flex justify-between items-end mb-4"><span class="text-gray-500 text-sm">Total a pagar</span><span class="text-2xl font-bold text-gray-800" id="final-total">R$ 0,00</span></div><button onclick="finishOrder()" class="w-full bg-brand text-white font-bold py-4 rounded-xl shadow-lg hover:bg-red-700 active:scale-95 transition-transform flex items-center justify-center gap-2"><span>Enviar Pedido via WhatsApp</span><i class="fab fa-whatsapp text-xl"></i></button></div>
+        </div>
+    </div>
+    <div id="toast" class="fixed top-5 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-full shadow-2xl z-[60] text-sm font-medium transition-all duration-300 opacity-0 translate-y-[-20px] pointer-events-none flex items-center gap-2"><i class="fas fa-check-circle text-green-400"></i><span>Item adicionado!</span></div>
+
+    <script>
+        // --- DADOS DO CARDÁPIO ATUALIZADOS ---
+        const menuData = [
+            {
+                category: "Os Favoritos",
+                icon: "🔥",
+                items: [
+                    { id: 1, name: "Double Cheddar Bacon", desc: "Pão de brioche, 2 carnes grelhadas, muito bacon e dobro de cheddar.", price: 34.90, img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
+                    { id: 2, name: "Big Salad Burger", desc: "A opção equilibrada: Carne 180g, alface americana, tomate fresco, picles e molho especial.", price: 28.50, img: "https://images.unsplash.com/photo-1550547660-d9450f859349?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
+                    { id: 3, name: "Chicken Crispy Supreme", desc: "Filé de frango empanado ultra crocante, maionese temperada e alface.", price: 26.90, img: "https://images.unsplash.com/photo-1615551309143-69d3d2dfd7e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" }
+                ]
+            },
+            {
+                category: "Acompanhamentos",
+                icon: "🍟",
+                items: [
+                    { id: 4, name: "Batata Frita Grande", desc: "Crocante e sequinha. Acompanha maionese verde.", price: 14.90, img: "https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
+                    { id: 5, name: "Onion Rings (8 un)", desc: "Anéis de cebola empanados e dourados.", price: 16.50, img: "https://images.unsplash.com/photo-1639024471283-03518883512d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
+                    { id: 6, name: "Nuggets (10 un)", desc: "Crocantes por fora, macios por dentro.", price: 15.00, img: "https://images.unsplash.com/photo-1564834724105-918b73d1b9e0?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" }
+                ]
+            },
+            {
+                category: "Bebidas & Shakes",
+                icon: "🥤",
+                items: [
+                    { id: 7, name: "Milkshake Morango", desc: "Feito com sorvete de verdade e calda de morango.", price: 18.00, img: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" },
+                    { id: 8, name: "Refrigerante Lata", desc: "Coca, Guaraná ou Fanta (Escolha na obs).", price: 6.00, img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" }
+                ]
+            }
+        ];
+
+        let cart = [];
+
+        document.addEventListener('DOMContentLoaded', () => { renderMenu(); renderCategories(); });
+
+        function renderCategories() {
+            const nav = document.getElementById('category-nav');
+            menuData.forEach((cat, index) => {
+                const activeClass = index === 0 ? 'text-brand border-b-2 border-brand font-bold' : 'text-gray-500 hover:text-gray-800';
+                nav.innerHTML += `<a href="#cat-${index}" class="whitespace-nowrap py-4 px-2 text-sm transition-colors ${activeClass}">${cat.icon} ${cat.category}</a>`;
+            });
+        }
+
+        function renderMenu() {
+            const container = document.getElementById('menu-container');
+            menuData.forEach((cat, index) => {
+                let itemsHtml = '';
+                cat.items.forEach(item => {
+                    itemsHtml += `
+                        <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-100 flex gap-4 transition-transform active:scale-[0.98]">
+                            <div class="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0 bg-gray-200">
+                                <img src="${item.img}" class="w-full h-full object-cover" loading="lazy" alt="${item.name}">
+                            </div>
+                            <div class="flex flex-col flex-1 justify-between">
+                                <div><h3 class="font-bold text-gray-800 text-sm line-clamp-1">${item.name}</h3><p class="text-xs text-gray-500 line-clamp-2 mt-1">${item.desc}</p></div>
+                                <div class="flex justify-between items-center mt-2"><span class="font-bold text-brand">R$ ${item.price.toFixed(2).replace('.', ',')}</span><button onclick="addToCart(${item.id})" class="bg-gray-100 text-gray-800 w-8 h-8 rounded-full flex items-center justify-center hover:bg-brand hover:text-white transition-colors"><i class="fas fa-plus text-xs"></i></button></div>
+                            </div>
+                        </div>`;
+                });
+                container.innerHTML += `<div id="cat-${index}" class="scroll-mt-32"><h2 class="font-bold text-lg text-gray-800 mb-3 ml-1">${cat.category}</h2><div class="grid grid-cols-1 md:grid-cols-2 gap-4">${itemsHtml}</div></div>`;
+            });
+        }
+
+        function addToCart(id) {
+            const item = findItem(id);
+            const existingItem = cart.find(i => i.id === id);
+            if (existingItem) { existingItem.qty++; } else { cart.push({ ...item, qty: 1 }); }
+            updateCartUI();
+            showToast(`"${item.name}" adicionado!`);
+        }
+
+        function removeFromCart(id) {
+            const index = cart.findIndex(i => i.id === id);
+            if (index > -1) { if (cart[index].qty > 1) { cart[index].qty--; } else { cart.splice(index, 1); } }
+            updateCartUI();
+        }
+
+        function findItem(id) { for (let cat of menuData) { for (let item of cat.items) { if (item.id === id) return item; } } }
+
+        function updateCartUI() {
+            const totalQty = cart.reduce((acc, item) => acc + item.qty, 0);
+            const totalPrice = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+            document.getElementById('cart-count').innerText = totalQty;
+            document.getElementById('cart-total-float').innerText = formatCurrency(totalPrice);
+            document.getElementById('final-total').innerText = formatCurrency(totalPrice);
+            const floatBtn = document.getElementById('cart-float-btn');
+            totalQty > 0 ? floatBtn.classList.remove('translate-y-24') : floatBtn.classList.add('translate-y-24');
+            const itemsContainer = document.getElementById('cart-items');
+            if (cart.length === 0) { itemsContainer.innerHTML = ''; document.getElementById('empty-cart-msg').classList.remove('hidden'); } else { document.getElementById('empty-cart-msg').classList.add('hidden'); itemsContainer.innerHTML = cart.map(item => `<div class="flex justify-between items-center py-2 border-b border-gray-50 last:border-0"><div class="flex-1"><div class="text-sm font-semibold text-gray-800">${item.name}</div><div class="text-xs text-brand font-bold">${formatCurrency(item.price * item.qty)}</div></div><div class="flex items-center gap-3 bg-gray-100 rounded-lg p-1"><button onclick="removeFromCart(${item.id})" class="w-6 h-6 flex items-center justify-center text-gray-500 hover:text-red-500"><i class="fas fa-minus text-xs"></i></button><span class="text-sm font-bold w-4 text-center">${item.qty}</span><button onclick="addToCart(${item.id})" class="w-6 h-6 flex items-center justify-center text-gray-500 hover:text-green-500"><i class="fas fa-plus text-xs"></i></button></div></div>`).join(''); }
+        }
+
+        function toggleModal(show) { const modal = document.getElementById('cart-modal'); show ? modal.classList.remove('hidden') : modal.classList.add('hidden'); }
+        function toggleDeliveryFields() { const isDelivery = document.querySelector('input[name="delivery-type"]:checked').value === 'delivery'; const addressFields = document.getElementById('address-fields'); isDelivery ? addressFields.classList.remove('hidden') : addressFields.classList.add('hidden'); }
+        function toggleChangeField() { const method = document.getElementById('payment-method').value; const field = document.getElementById('change-field'); method === 'money' ? field.classList.remove('hidden') : field.classList.add('hidden'); }
+        function showToast(msg) { const toast = document.getElementById('toast'); toast.querySelector('span').innerText = msg; toast.classList.remove('opacity-0', 'translate-y-[-20px]'); setTimeout(() => { toast.classList.add('opacity-0', 'translate-y-[-20px]'); }, 2500); }
+        function formatCurrency(value) { return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }
+
+        function finishOrder() {
+            if (cart.length === 0) return showToast("Seu carrinho está vazio!");
+            const name = document.getElementById('input-name').value;
+            if (!name) return alert("Por favor, digite seu nome.");
+            let text = `*NOVO PEDIDO - ${name}*\n\n`;
+            cart.forEach(item => { text += `▪ ${item.qty}x ${item.name} \n`; });
+            text += `\n*Total: ${document.getElementById('final-total').innerText}*\n--------------------------\n`;
+            const type = document.querySelector('input[name="delivery-type"]:checked').value;
+            text += type === 'delivery' ? `🛵 *Entrega para:*\n${document.getElementById('input-rua').value}, ${document.getElementById('input-bairro').value}\n` : `🛍 *Retirada no Balcão*\n`;
+            const paymentText = document.getElementById('payment-method').options[document.getElementById('payment-method').selectedIndex].text;
+            text += `💳 *Pagamento:* ${paymentText}`;
+            if (document.getElementById('payment-method').value === 'money') { const troco = document.getElementById('input-troco').value; if(troco) text += `\n💵 Troco para: ${troco}`; }
+            // window.open(`https://wa.me/55SEUNUMERO?text=${encodeURIComponent(text)}`);
+            alert("Simulação: Mensagem pronta para envio!\n\n" + text);
+        }
+    </script>
+</body>
+</html>
