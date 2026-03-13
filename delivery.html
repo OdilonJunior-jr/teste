@@ -41,21 +41,39 @@
             background-size: cover; background-position: center;
         }
 
-        /* HEADER */
-        header { position: fixed; top: 0; left: 0; width: 100%; z-index: 100; padding: 15px 0; background: transparent; }
-        .header-inner{ max-width: 1200px; margin: 0 auto; padding: 0 20px; position: relative; display: flex; justify-content: space-between; align-items: center; }
-        .logo-floating{ display: flex; align-items: center; text-decoration: none; }
-        .logo-floating img{ height: 45px; width: auto; display: block; }
+        /* HEADER APENAS COM A LOGO NO TOPO */
+        header { position: absolute; top: 0; left: 0; width: 100%; z-index: 100; padding: 25px 0; background: transparent; }
+        .header-inner { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: flex-start; align-items: center; }
+        .logo-floating { display: flex; align-items: center; text-decoration: none; }
+        .logo-floating img { height: 45px; width: auto; display: block; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5)); }
 
-        nav.nav-pill{ display: flex; align-items: center; padding: 6px 20px; background: rgba(15, 15, 15, 0.75); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 100px; backdrop-filter: blur(15px); }
+        /* MENU PÍLULA FLUTUANTE NA BASE DA TELA */
+        nav.nav-pill { 
+            position: fixed; 
+            bottom: 30px; 
+            left: 50%; 
+            transform: translateX(-50%);
+            z-index: 90; /* Fica abaixo do modal do celular */
+            display: flex; 
+            align-items: center; 
+            padding: 10px 30px; 
+            background: rgba(15, 15, 15, 0.85); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            border-radius: 100px; 
+            backdrop-filter: blur(15px); 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8); 
+            transition: 0.3s;
+        }
         .nav-links { display: flex; align-items: center; }
-        .nav-links a { color: var(--text-muted); text-decoration: none; margin: 0 15px; font-size: 0.85rem; font-weight: 500; transition: 0.2s; cursor: pointer; }
+        .nav-links a { color: var(--text-muted); text-decoration: none; margin: 0 15px; font-size: 0.95rem; font-weight: 500; transition: 0.2s; cursor: pointer; }
         .nav-links a:hover, .nav-links a.active { color: #fff; font-weight: 700; }
-        .btn-nav { margin-left: 15px; color: #000 !important; background: var(--whatsapp); border-radius: 50px; padding: 6px 16px; text-decoration: none; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 6px; transition: transform 0.3s ease; }
-        .btn-nav:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4); }
+        
+        /* ÍCONE WHATSAPP PURO */
+        .btn-nav { margin-left: 20px; color: var(--whatsapp) !important; text-decoration: none; font-size: 1.8rem; display: flex; align-items: center; justify-content: center; transition: transform 0.3s ease; filter: drop-shadow(0 0 8px rgba(37, 211, 102, 0.3)); cursor: pointer; }
+        .btn-nav:hover { transform: scale(1.15); filter: drop-shadow(0 0 15px rgba(37, 211, 102, 0.8)); color: #fff !important; }
 
         /* HERO SECTION */
-        .container { max-width: 900px; margin: 100px auto 80px; padding: 0 20px; position: relative; z-index: 2; width: 100%; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .container { max-width: 900px; margin: 120px auto 120px; padding: 0 20px; position: relative; z-index: 2; width: 100%; display: flex; flex-direction: column; align-items: center; text-align: center; }
         
         .btn-back { color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px; transition: 0.3s; margin-bottom: 20px; }
         .btn-back:hover { color: #fff; }
@@ -67,48 +85,17 @@
         /* GRID DE CARDS TRAVADO EM 2x2 SEMPRE */
         .cards-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 100%; }
         
-        .card { 
-            border: 1px solid var(--border); 
-            border-radius: 20px; 
-            padding: 40px 30px; 
-            transition: 0.3s; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            text-align: center; 
-            backdrop-filter: blur(12px); 
-            overflow: hidden;
-        }
-        .card:hover { 
-            border-color: rgba(37, 211, 102, 0.2); 
-            transform: translateY(-4px); 
-            box-shadow: 0 15px 40px rgba(0,0,0,0.4); 
-        }
+        .card { border: 1px solid var(--border); border-radius: 20px; padding: 40px 30px; transition: 0.3s; display: flex; flex-direction: column; align-items: center; text-align: center; backdrop-filter: blur(12px); overflow: hidden; }
+        .card:hover { border-color: rgba(37, 211, 102, 0.2); transform: translateY(-4px); box-shadow: 0 15px 40px rgba(0,0,0,0.4); }
         
-        .icon-box { 
-            width: 55px; 
-            height: 55px; 
-            margin-bottom: 20px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            border-radius: 12px; 
-            border: 1px solid rgba(255, 255, 255, 0.08); 
-            background: rgba(0, 0, 0, 0.4); 
-            position: relative;
-            z-index: 2;
-        }
+        .icon-box { width: 55px; height: 55px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.08); background: rgba(0, 0, 0, 0.4); position: relative; z-index: 2; }
         .icon-box i { font-size: 1.5rem; color: var(--whatsapp); }
 
         .card h3 { font-size: 1.8rem; margin-bottom: 6px; color: #fff; font-family: 'Playfair Display', serif; font-style: italic; font-weight: 700; position: relative; z-index: 2; }
         .card .badge { color: var(--whatsapp); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px; display: block; margin-bottom: 15px; font-weight: 800; position: relative; z-index: 2; }
         .card p { color: var(--text-muted); line-height: 1.5; font-size: 0.85rem; margin-bottom: 30px; max-width: 280px; position: relative; z-index: 2; }
         
-        .btn-testar { 
-            background: #fff; color: #000; padding: 10px 24px; border-radius: 50px; font-family: 'Outfit', sans-serif;
-            font-weight: 800; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; 
-            transition: 0.3s; border: none; margin-top: auto; position: relative; z-index: 2;
-        }
+        .btn-testar { background: #fff; color: #000; padding: 10px 24px; border-radius: 50px; font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; transition: 0.3s; border: none; margin-top: auto; position: relative; z-index: 2; }
         .btn-testar i { font-size: 1.1rem; transition: transform 0.3s; }
         .card:hover .btn-testar { box-shadow: 0 0 15px rgba(255,255,255,0.15); }
         .card:hover .btn-testar i { transform: translateX(2px) translateY(-2px); }
@@ -121,20 +108,23 @@
         .close-modal { position: absolute; top: -10px; right: -60px; width: 40px; height: 40px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; transition: 0.3s; z-index: 10; }
         .close-modal:hover { background: #ff4757; border-color: #ff4757; transform: rotate(90deg); }
 
-        /* iPhone Frame */
         .iphone-frame { width: 340px; height: 680px; background: #000; border: 12px solid #1a1a1a; border-radius: 45px; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 0 2px #333; overflow: hidden; }
         .notch { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 120px; height: 25px; background: #1a1a1a; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; z-index: 10; }
         .notch::after { content: ''; position: absolute; top: 5px; right: 25px; width: 8px; height: 8px; border-radius: 50%; background: #0a0a0a; box-shadow: inset 0 0 2px rgba(255,255,255,0.2); }
         .iframe-container { width: 100%; height: 100%; border: none; background: #111; border-radius: 32px; }
         .loader { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border: 3px solid rgba(255,255,255,0.1); border-top-color: var(--whatsapp); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; z-index: 5; transition: opacity 0.3s; pointer-events: none; opacity: 0; }
-        
         @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
 
         /* RESPONSIVO */
         @media (max-width: 768px) {
             h1 { font-size: 2.2rem; }
-            .header-inner { justify-content: center; flex-direction: column; gap: 15px; }
-            .logo-floating { margin-bottom: 10px; }
+            .header-inner { justify-content: center; } /* Centraliza a logo no mobile */
+            .logo-floating img { height: 40px; }
+            
+            nav.nav-pill { bottom: 20px; padding: 10px 20px; width: max-content; }
+            .nav-links a { margin: 0 10px; font-size: 0.85rem; }
+            .btn-nav { margin-left: 15px; font-size: 1.6rem; }
+            
             .cards-grid { gap: 10px; }
             .card { padding: 20px 15px; }
             .card h3 { font-size: 1.1rem; }
@@ -143,16 +133,18 @@
             .btn-testar { padding: 8px 15px; font-size: 0.75rem; }
             .icon-box { width: 40px; height: 40px; margin-bottom: 10px; }
             .icon-box i { font-size: 1.2rem; }
+            
             .close-modal { top: -50px; right: 50%; transform: translateX(50%); }
             .close-modal:hover { transform: translateX(50%) scale(1.1); }
             .iphone-frame { width: 90vw; height: 85vh; border-width: 8px; border-radius: 35px; }
             .iframe-container { border-radius: 25px; }
-            .nav-pill { display: none; }
         }
         
-        /* Quebra para 1 coluna apenas em ecrãs extremamente pequenos */
         @media (max-width: 450px) {
             .cards-grid { grid-template-columns: 1fr; }
+            nav.nav-pill { width: 95%; padding: 8px 15px; justify-content: center; }
+            .nav-links a { margin: 0 8px; font-size: 0.8rem; }
+            .btn-nav { margin-left: 10px; font-size: 1.5rem; }
         }
 
         .reveal { opacity: 0; transform: translateY(20px); transition: 0.6s ease; }
@@ -167,16 +159,19 @@
             <a href="index.html" class="logo-floating">
                 <img src="logo.jpg" alt="GRIDX">
             </a>
-            <nav class="nav-pill">
-                <div class="nav-links">
-                    <a href="index.html">Início</a>
-                    <a href="index.html">Portfólio</a>
-                    <a href="#" class="active" style="color: #fff;">Delivery Web</a>
-                </div>
-                <a href="https://wa.me/5534991823910" class="btn-nav">Contato <i class="ri-whatsapp-line"></i></a>
-            </nav>
         </div>
     </header>
+
+    <nav class="nav-pill">
+        <div class="nav-links">
+            <a href="index.html">Início</a>
+            <a href="index.html">Portfólio</a>
+            <a href="#" class="active" style="color: #fff;">Delivery Web</a>
+        </div>
+        <a href="https://wa.me/5534991823910" class="btn-nav" aria-label="Falar no WhatsApp">
+            <i class="ri-whatsapp-fill"></i>
+        </a>
+    </nav>
 
     <div class="container">
         <div class="reveal active">
@@ -247,7 +242,6 @@
         const iframe = document.getElementById('previewFrame');
         const loader = document.getElementById('frameLoader');
 
-        // Escuta quando o iframe terminar de carregar o arquivo para esconder o loader
         iframe.addEventListener('load', function() {
             if(iframe.src && iframe.src !== window.location.href && iframe.src !== 'about:blank') {
                 loader.style.opacity = '0';

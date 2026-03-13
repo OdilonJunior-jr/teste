@@ -82,7 +82,7 @@ body.loaded { overflow-y: auto; }
 header { position: fixed; top: 0; left: 0; width: 100%; z-index: 100; padding: 20px 0; background: transparent; }
 .header-inner{ max-width: 1050px; margin: 0 auto; padding: 0 20px; position: relative; display: flex; justify-content: flex-end; align-items: center; }
 .logo-floating{ position: absolute; left: 20px; top: 50%; transform: translateY(-50%); text-decoration: none; cursor: pointer; display: flex; align-items: center; }
-.logo-floating img{ height: 140px; width: auto; display: block; }
+.logo-floating img{ height: 75px; width: auto; display: block; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5)); transition: 0.3s; }
 
 nav.nav-pill{ display: flex; align-items: center; justify-content: flex-end; padding: 10px 25px; background: rgba(15, 15, 15, 0.75); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 100px; backdrop-filter: blur(15px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 .nav-links { display: flex; align-items: center; }
@@ -172,7 +172,9 @@ footer { padding: 60px 0; border-top: 1px solid var(--border); text-align: cente
     .header-inner { padding: 0 15px; }
     .logo-floating { left: 15px; }
     nav.nav-pill { padding: 10px 18px; }
-    .logo img { height: 110px; }
+    
+    /* AQUI ESTÁ O AJUSTE DA LOGO NO MOBILE */
+    .logo-floating img { height: 50px; } 
     
     .hero { text-align: center; padding: 110px 0 50px 0; }
     
@@ -369,8 +371,8 @@ footer { padding: 60px 0; border-top: 1px solid var(--border); text-align: cente
                 <div class="project-item reveal">
                     <div class="mockup-wrapper">
                         <div class="mockup-container">
-                            <div class="macbook"><img src="burger.jpg" alt="Sistema Delivery Hamburgueria" onerror="this.src='fundo.jpg'"></div>
-                            <div class="iphone-float"><img src="burger.jpg" alt="Delivery Mobile" onerror="this.src='fundo.jpg'"></div>
+                            <div class="macbook"><img src="burguer.jpg" alt="Sistema Delivery Hamburgueria" onerror="this.src='fundo.jpg'"></div>
+                            <div class="iphone-float"><img src="burguer.jpg" alt="Delivery Mobile" onerror="this.src='fundo.jpg'"></div>
                         </div>
                     </div>
                     <div class="project-info">
